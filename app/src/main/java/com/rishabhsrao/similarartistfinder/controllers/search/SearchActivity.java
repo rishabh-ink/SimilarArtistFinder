@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.rishabhsrao.similarartistfinder.R;
 import com.rishabhsrao.similarartistfinder.controllers.similarartists.SimilarArtistsActivity;
+import com.rishabhsrao.similarartistfinder.settings.Settings;
 import com.rishabhsrao.similarartistfinder.validators.EditTextValidator;
 
 
@@ -25,8 +26,20 @@ public class SearchActivity extends Activity {
       @Override
       public void onClick(View view) {
         EditTextValidator editTextValidator = new EditTextValidator();
+
         if(editTextValidator.validate(SearchActivity.this.artistNameEditText)) {
           Intent searchArtistIntent = new Intent(SearchActivity.this, SimilarArtistsActivity.class);
+
+          searchArtistIntent.putExtra(
+            Settings.INTENT_EXTRA_ARTIST_NAME,
+            SearchActivity.this.artistNameEditText.getText().toString().trim()
+          );
+
+          SearchActivity.this.startActivity(searchArtistIntent);
+        } else {
+          SearchActivity.this.artistNameEditText.setError(
+            SearchActivity.this.getString(R.string.activity_search_edittext_artistname_error)
+          );
         }
       }
     };
