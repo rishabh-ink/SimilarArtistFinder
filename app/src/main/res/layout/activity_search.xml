@@ -15,16 +15,16 @@
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true">
 
-    <EditText android:id="@+id/activity_search_input_artist_name"
+    <EditText android:id="@+id/activity_search_edittext_artistname"
       android:layout_width="@dimen/layout_width_auto"
       android:layout_height="wrap_content"
       android:layout_weight="1" />
 
-    <Button android:id="@+id/activity_search_action_search"
+    <Button android:id="@+id/activity_search_button_search"
       style="?android:attr/buttonStyleSmall"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/activity_search_action_search" />
+      android:text="@string/activity_search_button_search" />
 
   </LinearLayout>
 
