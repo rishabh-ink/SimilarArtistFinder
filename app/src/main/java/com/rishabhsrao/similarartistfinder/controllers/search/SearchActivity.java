@@ -1,6 +1,7 @@
 package com.rishabhsrao.similarartistfinder.controllers.search;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.rishabhsrao.similarartistfinder.R;
+import com.rishabhsrao.similarartistfinder.controllers.similarartists.SimilarArtistsActivity;
+import com.rishabhsrao.similarartistfinder.validators.EditTextValidator;
 
 
 public class SearchActivity extends Activity {
@@ -21,12 +24,10 @@ public class SearchActivity extends Activity {
     this.searchButtonClickListener = new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Toast toast = Toast.makeText(
-          SearchActivity.this,
-          "Searching..." + artistNameEditText.getText().toString(),
-          Toast.LENGTH_LONG
-        );
-        toast.show();
+        EditTextValidator editTextValidator = new EditTextValidator();
+        if(editTextValidator.validate(SearchActivity.this.artistNameEditText)) {
+          Intent searchArtistIntent = new Intent(SearchActivity.this, SimilarArtistsActivity.class);
+        }
       }
     };
   }
