@@ -1,5 +1,6 @@
 package com.rishabhsrao.similarartistfinder.controllers.similarartists;
 
+import android.content.Context;
 import android.util.Log;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,10 +8,18 @@ import com.rishabhsrao.similarartistfinder.models.EStatus;
 import com.rishabhsrao.similarartistfinder.models.SelectedArtist;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 public class ArtistConstructor {
+  private Context context;
+
+  public ArtistConstructor() {
+  }
+
+  public ArtistConstructor(Context context) {
+    this.context = context;
+  }
+
   public SelectedArtist fetchSelectedArtist(final String artistName) {
     JsonNode artistInfo;
     SelectedArtist selectedArtist = null;
@@ -32,7 +41,7 @@ public class ArtistConstructor {
   }
 
   private SelectedArtist parseArtistInfo(JsonNode artistInfo) throws IOException {
-    SelectedArtist selectedArtist = new SelectedArtist();
+    SelectedArtist selectedArtist;
     ObjectMapper objectMapper = new ObjectMapper();
     JsonNode itemsFirst = artistInfo.path("value").path("items").path(0);
 
@@ -60,5 +69,13 @@ public class ArtistConstructor {
         return null;
       }
     }
+  }
+
+  public Context getContext() {
+    return context;
+  }
+
+  public void setContext(Context context) {
+    this.context = context;
   }
 }

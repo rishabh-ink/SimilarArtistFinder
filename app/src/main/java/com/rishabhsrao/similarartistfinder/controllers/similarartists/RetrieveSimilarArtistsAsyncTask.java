@@ -1,5 +1,7 @@
 package com.rishabhsrao.similarartistfinder.controllers.similarartists;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -14,6 +16,24 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, JsonNode> {
+  Context context;
+  ProgressDialog progressDialog;
+
+  public RetrieveSimilarArtistsAsyncTask() {
+  }
+
+  public RetrieveSimilarArtistsAsyncTask(Context context) {
+    this.context = context;
+  }
+
+  @Override
+  protected void onPreExecute() {
+    super.onPreExecute();
+
+    Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Showing progress dialog...");
+    this.progressDialog = ProgressDialog.show(this.context, "Searching", "Please wait...");
+  }
+
   @Override
   protected JsonNode doInBackground(String... artistName) {
     Uri.Builder uri = Settings.API_URI.appendQueryParameter("artistName", artistName[0]);
@@ -46,6 +66,26 @@ public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, 
   @Override
   protected void onPostExecute(JsonNode jsonNode) {
     super.onPostExecute(jsonNode);
-    Log.e(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Retrieved JSON: " + jsonNode.toString());
+
+    Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Dismissing progress dialog...");
+    this.progressDialog.dismiss();
+
+    Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Retrieved JSON: " + jsonNode.toString());
+  }
+
+  public Context getContext() {
+    return context;
+  }
+
+  public void setContext(Context context) {
+    this.context = context;
+  }
+
+  public ProgressDialog getProgressDialog() {
+    return progressDialog;
+  }
+
+  public void setProgressDialog(ProgressDialog progressDialog) {
+    this.progressDialog = progressDialog;
   }
 }

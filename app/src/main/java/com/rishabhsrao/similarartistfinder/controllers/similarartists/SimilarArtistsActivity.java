@@ -25,7 +25,7 @@ public class SimilarArtistsActivity extends Activity {
     Intent searchArtistIntent = this.getIntent();
     String artistName = searchArtistIntent.getStringExtra(Settings.INTENT_EXTRA_ARTIST_NAME);
 
-    ArtistConstructor artistConstructor = new ArtistConstructor();
+    ArtistConstructor artistConstructor = new ArtistConstructor(SimilarArtistsActivity.this);
     this.selectedArtist = artistConstructor.fetchSelectedArtist(artistName);
 
     Log.d(SimilarArtistsActivity.class.getSimpleName(), "Selected artist: " + this.selectedArtist);
