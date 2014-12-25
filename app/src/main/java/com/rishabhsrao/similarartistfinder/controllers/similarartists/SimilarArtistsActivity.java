@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import com.rishabhsrao.similarartistfinder.R;
 import com.rishabhsrao.similarartistfinder.settings.Settings;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class SimilarArtistsActivity extends Activity {
   private String artistName;
@@ -25,6 +29,15 @@ public class SimilarArtistsActivity extends Activity {
     this.artistName = searchArtistIntent.getStringExtra(Settings.INTENT_EXTRA_ARTIST_NAME);
 
     Log.d(SimilarArtistsActivity.class.getName(), "Searching for " + this.artistName);
+    try {
+      JSONObject artistInfo = new RetrieveSimilarArtistsAsyncTask().execute(this.artistName).get();
+      TextView artistBio = (TextView) this.findViewById(R.id.activity_similar_artists_artistbio);
+
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
