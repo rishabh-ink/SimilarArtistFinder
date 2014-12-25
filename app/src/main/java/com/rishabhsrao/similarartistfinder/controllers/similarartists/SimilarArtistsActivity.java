@@ -11,6 +11,8 @@ import com.rishabhsrao.similarartistfinder.R;
 import com.rishabhsrao.similarartistfinder.models.SelectedArtist;
 import com.rishabhsrao.similarartistfinder.settings.Settings;
 
+import java.util.concurrent.ExecutionException;
+
 public class SimilarArtistsActivity extends Activity {
   private SelectedArtist selectedArtist;
 
@@ -25,9 +27,7 @@ public class SimilarArtistsActivity extends Activity {
     Intent searchArtistIntent = this.getIntent();
     String artistName = searchArtistIntent.getStringExtra(Settings.INTENT_EXTRA_ARTIST_NAME);
 
-    ArtistConstructor artistConstructor = new ArtistConstructor(SimilarArtistsActivity.this);
-    this.selectedArtist = artistConstructor.fetchSelectedArtist(artistName);
-
+    this.selectedArtist = this.fetchSelectedArtist(artistName);
     Log.d(SimilarArtistsActivity.class.getSimpleName(), "Selected artist: " + this.selectedArtist);
   }
 
@@ -55,5 +55,21 @@ public class SimilarArtistsActivity extends Activity {
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  public SelectedArtist fetchSelectedArtist(final String artistName) {
+    SelectedArtist selectedArtist = null;
+
+    Log.d(ArtistConstructor.class.getSimpleName(), "Searching for " + artistName);
+    try {
+      selectedArtist = new RetrieveSimilarArtistsAsyncTask(SimilarArtistsActivity.this).execute(artistName).get();
+      return selectedArtist;
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+    return selectedArtist;
   }
 }

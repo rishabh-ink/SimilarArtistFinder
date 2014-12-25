@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rishabhsrao.similarartistfinder.models.SelectedArtist;
 import com.rishabhsrao.similarartistfinder.settings.Settings;
 
 import java.io.BufferedInputStream;
@@ -15,9 +16,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, JsonNode> {
-  Context context;
-  ProgressDialog progressDialog;
+public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, SelectedArtist> {
+  private Context context;
+  private ProgressDialog progressDialog;
 
   public RetrieveSimilarArtistsAsyncTask() {
   }
@@ -35,12 +36,13 @@ public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, 
   }
 
   @Override
-  protected JsonNode doInBackground(String... artistName) {
+  protected SelectedArtist doInBackground(String... artistName) {
     Uri.Builder uri = Settings.API_URI.appendQueryParameter("artistName", artistName[0]);
     Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Built URL: " + uri.toString());
 
-    JsonNode jsonNode = null;
+    JsonNode jsonNode;
     HttpURLConnection urlConnection = null;
+    SelectedArtist selectedArtist = null;
 
     try {
       URL url = new URL(uri.toString());
@@ -50,6 +52,9 @@ public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, 
 
       ObjectMapper objectMapper = new ObjectMapper();
       jsonNode = objectMapper.readTree(bufferedInputStream);
+
+      ArtistConstructor artistConstructor = new ArtistConstructor();
+      selectedArtist = artistConstructor.parseArtistInfo(jsonNode);
     } catch (MalformedURLException e) {
       e.printStackTrace();
     }
@@ -60,17 +65,17 @@ public class RetrieveSimilarArtistsAsyncTask extends AsyncTask<String, Integer, 
       urlConnection.disconnect();
     }
 
-    return jsonNode;
+    return selectedArtist;
   }
 
   @Override
-  protected void onPostExecute(JsonNode jsonNode) {
-    super.onPostExecute(jsonNode);
+  protected void onPostExecute(SelectedArtist selectedArtist) {
+    super.onPostExecute(selectedArtist);
 
     Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Dismissing progress dialog...");
     this.progressDialog.dismiss();
 
-    Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Retrieved JSON: " + jsonNode.toString());
+//    Log.d(RetrieveSimilarArtistsAsyncTask.class.getSimpleName(), "Retrieved JSON: " + jsonNode.toString());
   }
 
   public Context getContext() {
