@@ -32,4 +32,12 @@ public class ArtistImage {
   public void setContent(URL content) {
     this.content = content;
   }
+
+  @Override
+  public String toString() {
+    return "ArtistImage{" +
+      "size=" + size +
+      ", content=" + content +
+      '}';
+  }
 }

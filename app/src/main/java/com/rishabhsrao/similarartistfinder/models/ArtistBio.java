@@ -1,11 +1,7 @@
 package com.rishabhsrao.similarartistfinder.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-import java.util.Calendar;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArtistBio {
@@ -18,14 +14,13 @@ public class ArtistBio {
   @JsonProperty(value="placeformed")
   private String placeFormed;
 
-  @JsonProperty(value="yearformed")
-  private Calendar yearFormed;
+  public ArtistBio() {
+  }
 
-  public ArtistBio(String summary, String content, String placeFormed, String yearFormed) {
+  public ArtistBio(String summary, String content, String placeFormed) {
     this.setSummary(summary);
     this.setContent(content);
     this.setPlaceFormed(placeFormed);
-    this.setYearFormed(yearFormed);
   }
 
   public String getSummary() {
@@ -52,22 +47,12 @@ public class ArtistBio {
     this.placeFormed = placeFormed;
   }
 
-  @JsonValue
-  public Calendar getYearFormed() {
-    return yearFormed;
-  }
-
-  @JsonCreator
-  public void setYearFormed(String yearFormed) {
-    int yearFormedInt;
-
-    try {
-      yearFormedInt = Integer.parseInt(yearFormed, 10);
-
-    } catch (NumberFormatException e) {
-      yearFormedInt = 1970;
-    }
-
-    this.yearFormed.set(Calendar.YEAR, yearFormedInt);
+  @Override
+  public String toString() {
+    return "ArtistBio{" +
+      "summary='" + summary + '\'' +
+      ", content='" + content + '\'' +
+      ", placeFormed='" + placeFormed + '\'' +
+      '}';
   }
 }
